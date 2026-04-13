@@ -1,0 +1,143 @@
+/**
+ * Contact submissions: Supabase when SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY are set,
+ * otherwise a local JSON file (dev only; serverless hosts cannot persist it).
+ */
+import { mkdir, readFile, writeFile } from "fs/promises";
+import path from "path";
+
+import { randomUUID } from "crypto";
+
+import { getSupabaseServiceClient, isSupabaseConfigured } from "@/lib/supabase/service";
+
+export type ContactSubmission = {
+  id: string;
+  createdAt: string;
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  topic: string;
+  message: string;
+};
+
+type ContactSubmissionRow = {
+  id: string;
+  created_at: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  company: string | null;
+  topic: string | null;
+  message: string;
+};
+
+const DATA_DIR = path.join(process.cwd(), "data");
+const DATA_FILE = path.join(DATA_DIR, "contact-submissions.json");
+
+function rowToSubmission(row: ContactSubmissionRow): ContactSubmission {
+  return {
+    id: row.id,
+    createdAt: row.created_at,
+    name: row.name,
+    email: row.email,
+    phone: row.phone ?? "",
+    company: row.company ?? "",
+    topic: row.topic ?? "",
+    message: row.message,
+  };
+}
+
+async function ensureFile(): Promise<void> {
+  await mkdir(DATA_DIR, { recursive: true });
+  try {
+    await readFile(DATA_FILE, "utf-8");
+  } catch {
+    await writeFile(DATA_FILE, "[]\n", "utf-8");
+  }
+}
+
+async function readAllFile(): Promise<ContactSubmission[]> {
+  await ensureFile();
+  const raw = await readFile(DATA_FILE, "utf-8");
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed as ContactSubmission[];
+  } catch {
+    return [];
+  }
+}
+
+async function writeAllFile(rows: ContactSubmission[]): Promise<void> {
+  await ensureFile();
+  await writeFile(DATA_FILE, JSON.stringify(rows, null, 2) + "\n", "utf-8");
+}
+
+async function addFile(
+  input: Omit<ContactSubmission, "id" | "createdAt">
+): Promise<ContactSubmission> {
+  const rows = await readAllFile();
+  const row: ContactSubmission = {
+    id: randomUUID(),
+    createdAt: new Date().toISOString(),
+    ...input,
+  };
+  rows.unshift(row);
+  await writeAllFile(rows);
+  return row;
+}
+
+async function listFile(): Promise<ContactSubmission[]> {
+  return readAllFile();
+}
+
+export async function addContactSubmission(
+  input: Omit<ContactSubmission, "id" | "createdAt">
+): Promise<ContactSubmission> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseServiceClient();
+    const { data, error } = await supabase
+      .from("contact_submissions")
+      .insert({
+        name: input.name,
+        email: input.email,
+        phone: input.phone,
+        company: input.company,
+        topic: input.topic,
+        message: input.message,
+      })
+      .select(
+        "id, created_at, name, email, phone, company, topic, message"
+      )
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    if (!data) {
+      throw new Error("No row returned from insert");
+    }
+    return rowToSubmission(data as ContactSubmissionRow);
+  }
+
+  return addFile(input);
+}
+
+export async function listContactSubmissions(): Promise<ContactSubmission[]> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseServiceClient();
+    const { data, error } = await supabase
+      .from("contact_submissions")
+      .select(
+        "id, created_at, name, email, phone, company, topic, message"
+      )
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    return (data as ContactSubmissionRow[]).map(rowToSubmission);
+  }
+
+  return listFile();
+}

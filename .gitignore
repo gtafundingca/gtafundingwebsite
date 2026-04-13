@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local contact form submissions (admin inbox)
+/data/contact-submissions.json
