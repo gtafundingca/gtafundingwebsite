@@ -31,6 +31,11 @@ interface DotPatternProps extends React.SVGProps<SVGSVGElement> {
   [key: string]: unknown
 }
 
+function seededNoise(seed: number): number {
+  const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453
+  return x - Math.floor(x)
+}
+
 /**
  * DotPattern Component
  *
@@ -102,8 +107,8 @@ export function DotPattern({
       return {
         x: col * width + cx + x,
         y: row * height + cy + y,
-        delay: Math.random() * 5,
-        duration: Math.random() * 3 + 2,
+        delay: seededNoise(i + 1) * 5,
+        duration: seededNoise(i + 1001) * 3 + 2,
       }
     }
   )

@@ -12,6 +12,8 @@ import { getSupabaseServiceClient, isSupabaseConfigured } from "@/lib/supabase/s
 export type ContactSubmission = {
   id: string;
   createdAt: string;
+  completedAt?: string | null;
+  deletedAt?: string | null;
   name: string;
   email: string;
   phone: string;
@@ -23,6 +25,8 @@ export type ContactSubmission = {
 type ContactSubmissionRow = {
   id: string;
   created_at: string;
+  completed_at?: string | null;
+  deleted_at?: string | null;
   name: string;
   email: string;
   phone: string | null;
@@ -38,6 +42,8 @@ function rowToSubmission(row: ContactSubmissionRow): ContactSubmission {
   return {
     id: row.id,
     createdAt: row.created_at,
+    completedAt: row.completed_at ?? null,
+    deletedAt: row.deleted_at ?? null,
     name: row.name,
     email: row.email,
     phone: row.phone ?? "",
@@ -80,6 +86,8 @@ async function addFile(
   const row: ContactSubmission = {
     id: randomUUID(),
     createdAt: new Date().toISOString(),
+    completedAt: null,
+    deletedAt: null,
     ...input,
   };
   rows.unshift(row);
@@ -88,7 +96,8 @@ async function addFile(
 }
 
 async function listFile(): Promise<ContactSubmission[]> {
-  return readAllFile();
+  const rows = await readAllFile();
+  return rows.filter((r) => !r.deletedAt);
 }
 
 export async function addContactSubmission(
@@ -107,7 +116,7 @@ export async function addContactSubmission(
         message: input.message,
       })
       .select(
-        "id, created_at, name, email, phone, company, topic, message"
+        "id, created_at, completed_at, deleted_at, name, email, phone, company, topic, message"
       )
       .single();
 
@@ -129,8 +138,9 @@ export async function listContactSubmissions(): Promise<ContactSubmission[]> {
     const { data, error } = await supabase
       .from("contact_submissions")
       .select(
-        "id, created_at, name, email, phone, company, topic, message"
+        "id, created_at, completed_at, deleted_at, name, email, phone, company, topic, message"
       )
+      .is("deleted_at", null)
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -140,4 +150,50 @@ export async function listContactSubmissions(): Promise<ContactSubmission[]> {
   }
 
   return listFile();
+}
+
+export async function setContactSubmissionCompleted(
+  id: string,
+  completed: boolean
+): Promise<void> {
+  if (!id) return;
+
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseServiceClient();
+    const { error } = await supabase
+      .from("contact_submissions")
+      .update({ completed_at: completed ? new Date().toISOString() : null })
+      .eq("id", id);
+    if (error) throw new Error(error.message);
+    return;
+  }
+
+  const rows = await readAllFile();
+  const idx = rows.findIndex((r) => r.id === id);
+  if (idx === -1) return;
+  rows[idx] = {
+    ...rows[idx],
+    completedAt: completed ? new Date().toISOString() : null,
+  };
+  await writeAllFile(rows);
+}
+
+export async function deleteContactSubmission(id: string): Promise<void> {
+  if (!id) return;
+
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseServiceClient();
+    const { error } = await supabase
+      .from("contact_submissions")
+      .update({ deleted_at: new Date().toISOString() })
+      .eq("id", id);
+    if (error) throw new Error(error.message);
+    return;
+  }
+
+  const rows = await readAllFile();
+  const idx = rows.findIndex((r) => r.id === id);
+  if (idx === -1) return;
+  rows[idx] = { ...rows[idx], deletedAt: new Date().toISOString() };
+  await writeAllFile(rows);
 }

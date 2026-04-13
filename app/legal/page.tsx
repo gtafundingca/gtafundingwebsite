@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BackButton } from "@/components/back-button";
 
 const items = [
   {
@@ -31,7 +32,8 @@ export default function LegalIndexPage() {
   return (
     <main className="min-h-screen bg-black px-4 py-16 text-zinc-100 sm:px-6 sm:py-20">
       <div className="mx-auto w-full max-w-4xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400/90">
+        <BackButton href="/" label="Back to home" variant="dark" />
+        <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-sky-400/90">
           Legal
         </p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">

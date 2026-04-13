@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ExternalLink, Inbox, LayoutGrid, LogOut, Menu, X } from "lucide-react";
 
 import { adminLogout } from "@/app/admin/actions";
@@ -12,6 +13,7 @@ import { cn } from "@/lib/utils";
 
 function NavLink({
   href,
+  asLink,
   icon: Icon,
   label,
   badge,
@@ -19,23 +21,22 @@ function NavLink({
   onNavigate,
 }: {
   href: string;
+  asLink?: boolean;
   icon: typeof LayoutGrid;
   label: string;
   badge?: number;
   active: boolean;
   onNavigate?: () => void;
 }) {
-  return (
-    <a
-      href={href}
-      onClick={onNavigate}
-      className={cn(
-        "flex items-center gap-3 rounded-xl border px-3 py-2.5 text-sm font-medium transition-[background-color,border-color,color]",
-        active
-          ? "border-sky-500/35 bg-sky-500/12 text-white shadow-[0_0_24px_-12px_rgba(56,189,248,0.35)]"
-          : "border-transparent text-zinc-400 hover:border-white/8 hover:bg-white/[0.04] hover:text-zinc-100"
-      )}
-    >
+  const classes = cn(
+    "flex items-center gap-3 rounded-xl border px-3 py-2.5 text-sm font-medium transition-[background-color,border-color,color]",
+    active
+      ? "border-sky-500/35 bg-sky-500/12 text-white shadow-[0_0_24px_-12px_rgba(56,189,248,0.35)]"
+      : "border-transparent text-zinc-400 hover:border-white/8 hover:bg-white/[0.04] hover:text-zinc-100"
+  );
+
+  const body = (
+    <>
       <Icon className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
       <span className="min-w-0 flex-1">{label}</span>
       {badge != null && badge > 0 ? (
@@ -43,38 +44,37 @@ function NavLink({
           {badge}
         </span>
       ) : null}
+    </>
+  );
+
+  if (asLink) {
+    return (
+      <Link href={href} onClick={onNavigate} className={classes}>
+        {body}
+      </Link>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      onClick={onNavigate}
+      className={classes}
+    >
+      {body}
     </a>
   );
 }
 
 export function AdminSideNav({ inboxCount }: { inboxCount: number }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [active, setActive] = useState<"overview" | "contacts">("overview");
+  const pathname = usePathname();
+  const active = useMemo(() => {
+    if (pathname?.startsWith("/admin/contacts")) return "contacts";
+    return "overview";
+  }, [pathname]);
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
-
-  useEffect(() => {
-    const overview = document.getElementById("overview");
-    const contacts = document.getElementById("contacts");
-    if (!overview && !contacts) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        const top = visible[0]?.target.id;
-        if (top === "overview" || top === "contacts") {
-          setActive(top);
-        }
-      },
-      { root: null, rootMargin: "-12% 0px -55% 0px", threshold: [0, 0.15, 0.35] }
-    );
-
-    if (overview) observer.observe(overview);
-    if (contacts) observer.observe(contacts);
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     if (!mobileOpen) return;
@@ -119,14 +119,16 @@ export function AdminSideNav({ inboxCount }: { inboxCount: number }) {
           Navigate
         </p>
         <NavLink
-          href="#overview"
+          href="/admin"
+          asLink
           icon={LayoutGrid}
           label="Overview"
           active={active === "overview"}
           onNavigate={closeMobile}
         />
         <NavLink
-          href="#contacts"
+          href="/admin/contacts"
+          asLink
           icon={Inbox}
           label="Contact inbox"
           badge={inboxCount}

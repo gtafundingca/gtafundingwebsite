@@ -4,7 +4,6 @@ import type { ComponentType } from "react";
 import { Inbox, LayoutDashboard, Mail, TrendingUp } from "lucide-react";
 
 import { AdminSideNav } from "@/components/admin/admin-side-nav";
-import { ContactSubmissionCard } from "@/components/admin/contact-submission-card";
 import { ADMIN_COOKIE, isValidAdminCookie } from "@/lib/admin-session";
 import { listContactSubmissions } from "@/lib/contact-submissions-store";
 
@@ -118,13 +117,13 @@ export default async function AdminDashboardPage() {
           <main className="relative mx-auto w-full max-w-7xl flex-1 px-3 py-6 min-[400px]:px-4 sm:px-5 sm:py-8 md:px-6 md:py-10 lg:px-8">
             <header className="mb-8 border-b border-white/10 pb-6">
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-400/90 sm:text-xs">
-                GTA Funding
+                Admin
               </p>
               <h1 className="mt-1 text-xl font-semibold tracking-tight text-white sm:text-2xl">
                 Admin dashboard
               </h1>
               <p className="mt-1 text-sm text-zinc-500">
-                Overview and contact form submissions
+                Overview
               </p>
             </header>
 
@@ -253,63 +252,6 @@ export default async function AdminDashboardPage() {
                   </ul>
                 </div>
               ) : null}
-            </section>
-
-            <section
-              id="contacts"
-              className="mt-14 scroll-mt-[calc(3.5rem+1rem)] sm:mt-16 lg:scroll-mt-8"
-            >
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h2 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
-                    Contact inbox
-                  </h2>
-                  <p className="mt-1 text-sm text-zinc-500">
-                    Full details for every submission: ID, time, email, phone,
-                    company, topic, and message
-                  </p>
-                </div>
-                {submissions.length > 0 ? (
-                  <p className="text-xs font-medium text-zinc-500">
-                    Newest first · {submissions.length} total
-                  </p>
-                ) : null}
-              </div>
-
-              {submissions.length === 0 ? (
-                <div className="mt-8 rounded-2xl border border-dashed border-white/15 bg-zinc-900/30 px-4 py-14 text-center sm:mt-10 sm:px-8 sm:py-20">
-                  <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] text-zinc-500">
-                    <Inbox className="h-7 w-7" aria-hidden />
-                  </span>
-                  <p className="mt-6 text-lg font-semibold text-zinc-200">
-                    No messages yet
-                  </p>
-                  <p className="mx-auto mt-2 max-w-md text-pretty text-sm leading-relaxed text-zinc-500">
-                    Submissions from your homepage contact form will show up here
-                    with full contact details. Configure{" "}
-                    <code className="rounded bg-white/5 px-1.5 py-0.5 text-xs text-sky-300">
-                      SUPABASE_URL
-                    </code>{" "}
-                    and{" "}
-                    <code className="rounded bg-white/5 px-1.5 py-0.5 text-xs text-sky-300">
-                      SUPABASE_SERVICE_ROLE_KEY
-                    </code>{" "}
-                    (see{" "}
-                    <code className="rounded bg-white/5 px-1.5 py-0.5 text-xs text-sky-300">
-                      supabase/migrations/001_contact_submissions.sql
-                    </code>
-                    ), or use the local JSON file when those are unset.
-                  </p>
-                </div>
-              ) : (
-                <ul className="mt-8 grid list-none gap-5 sm:mt-10 lg:grid-cols-2 lg:gap-6">
-                  {submissions.map((s) => (
-                    <li key={s.id}>
-                      <ContactSubmissionCard s={s} />
-                    </li>
-                  ))}
-                </ul>
-              )}
             </section>
           </main>
         </div>

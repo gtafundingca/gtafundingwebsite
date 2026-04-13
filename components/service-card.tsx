@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import * as Dialog from "@radix-ui/react-dialog";
 import { ArrowUpRight, Check, X } from "lucide-react";
 
@@ -60,15 +61,15 @@ export function ServiceCard({
         {/* Cover: photo or gradient fallback */}
         {imageSrc ? (
           <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-zinc-200">
-            <img
+            <Image
               src={imageSrc}
               alt={alt}
+              fill
+              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
               className={cn(
                 "h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover/card:scale-[1.035] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100",
                 coverPositionClassName ?? "object-center"
               )}
-              loading="lazy"
-              decoding="async"
             />
             <div
               className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-black/10 to-black/70"
@@ -218,9 +219,11 @@ export function ServiceCard({
 
             {imageSrc ? (
               <div className="relative mb-6 aspect-[2.2/1] w-full overflow-hidden rounded-xl bg-zinc-200">
-                <img
+                <Image
                   src={imageSrc}
                   alt=""
+                  fill
+                  sizes="(min-width: 640px) 36rem, calc(100vw - 2rem)"
                   className={cn(
                     "h-full w-full object-cover",
                     coverPositionClassName ?? "object-center"

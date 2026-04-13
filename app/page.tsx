@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { ApplyForm } from "@/components/apply-form";
 import { ContactForm } from "@/components/contact-form";
 import { FadeIn, ScrollReveal } from "@/components/motion-ui";
 import { AnimatedStat } from "@/components/ui/animated-stat";
@@ -323,54 +324,61 @@ export default function Home() {
         className="border-t border-dashed border-black/15 bg-white px-4 py-16 text-black sm:px-6 sm:py-20 md:py-24"
       >
         <div className="mx-auto max-w-6xl">
-          <div className="max-w-3xl text-left">
-            <h2 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl md:text-5xl">
-              Apply Online.
-              <br />
-              Get Funded in 24 Hours.
-            </h2>
-          </div>
-
-          <div className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-            {[
-              {
-                step: "01",
-                title: "Quick Application",
-                body: "Fill our 2-minute online form. No paperwork, no branch visit — just your basic business details.",
-              },
-              {
-                step: "02",
-                title: "Advisor Calls You",
-                body: "A dedicated funding advisor reaches out within 2 hours to walk you through your best options.",
-              },
-              {
-                step: "03",
-                title: "Loan Processed",
-                body: "We match you instantly with the best lender from our 50+ network. Terms agreed within 24 hours.",
-              },
-              {
-                step: "04",
-                title: "Funds Deposited",
-                body: "Money lands directly in your business account. You receive an instant bank confirmation.",
-              },
-            ].map((item, i) => (
-              <div
-                key={item.step}
-                className={`relative pt-8 lg:pt-0 lg:pl-8 ${
-                  i > 0 ? "border-t border-black/10 lg:border-t-0" : ""
-                } ${i > 0 ? "lg:border-l lg:border-black/10" : ""}`}
-              >
-                <span className="text-sm font-semibold tabular-nums text-blue-600">
-                  {item.step}
-                </span>
-                <h3 className="mt-3 text-lg font-semibold tracking-tight">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-black/70">
-                  {item.body}
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-start lg:gap-12">
+            <div>
+              <div className="max-w-xl text-left">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-600">
+                  Apply
                 </p>
+                <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl md:text-5xl">
+                  Apply online.
+                  <br />
+                  Get funded in 24 hours.
+                </h2>
               </div>
-            ))}
+
+              <div className="mt-10 space-y-5">
+                {[
+                  {
+                    step: "01",
+                    title: "Submit application",
+                    body: "Share basic business details in 2 minutes.",
+                  },
+                  {
+                    step: "02",
+                    title: "Advisor review",
+                    body: "A funding advisor reviews your profile quickly.",
+                  },
+                  {
+                    step: "03",
+                    title: "Lender match",
+                    body: "We match you with suitable offers from our network.",
+                  },
+                  {
+                    step: "04",
+                    title: "Receive funds",
+                    body: "Once accepted, funds are sent to your account.",
+                  },
+                ].map((item) => (
+                  <div
+                    key={item.step}
+                    className="rounded-xl border border-zinc-200/80 bg-zinc-50 px-4 py-4"
+                  >
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-sky-700">
+                      Step {item.step}
+                    </p>
+                    <h3 className="mt-1 text-base font-semibold tracking-tight text-zinc-950">
+                      {item.title}
+                    </h3>
+                    <p className="mt-1.5 text-sm text-zinc-600">{item.body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <ApplyForm />
+            </div>
           </div>
         </div>
       </section>
@@ -396,12 +404,12 @@ export default function Home() {
                 Our dedication to excellence drives us to truly understand and
                 meet the unique funding needs of every Canadian business.
               </p>
-              <button
-                type="button"
-                className="mt-8 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/15"
+              <a
+                href="#apply"
+                className="mt-8 inline-flex rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/15"
               >
                 Apply for Funding →
-              </button>
+              </a>
             </div>
 
             <div className="relative">

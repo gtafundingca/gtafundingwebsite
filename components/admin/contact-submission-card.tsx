@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import type { ContactSubmission } from "@/lib/contact-submissions-store";
+import { ContactInboxActions } from "@/components/admin/contact-inbox-actions";
 
 function formatWhen(iso: string) {
   return new Date(iso).toLocaleString("en-CA", {
@@ -41,13 +42,21 @@ function Detail({
 }
 
 export function ContactSubmissionCard({ s }: { s: ContactSubmission }) {
+  const completed = Boolean(s.completedAt);
   return (
     <article className="flex flex-col rounded-2xl border border-white/[0.08] bg-zinc-900/70 shadow-[0_0_0_1px_rgba(255,255,255,0.03)_inset] backdrop-blur-sm transition-[border-color,box-shadow] hover:border-sky-500/20 hover:shadow-[0_0_40px_-20px_rgba(56,189,248,0.15)]">
       <div className="flex flex-col gap-3 border-b border-white/[0.06] p-4 sm:flex-row sm:items-start sm:justify-between sm:p-5">
         <div className="min-w-0">
-          <h3 className="text-lg font-semibold tracking-tight text-white">
-            {s.name}
-          </h3>
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-lg font-semibold tracking-tight text-white">
+              {s.name}
+            </h3>
+            {completed ? (
+              <span className="inline-flex items-center rounded-full border border-emerald-400/25 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-200">
+                Completed
+              </span>
+            ) : null}
+          </div>
           <p className="mt-1 font-mono text-[11px] text-zinc-500 break-all">
             ID {s.id}
           </p>
@@ -110,21 +119,24 @@ export function ContactSubmissionCard({ s }: { s: ContactSubmission }) {
         <div className="mt-2 max-h-[min(40vh,20rem)] overflow-y-auto rounded-xl border border-white/[0.06] bg-black/35 p-4 text-sm leading-relaxed text-zinc-200">
           <p className="whitespace-pre-wrap break-words">{s.message}</p>
         </div>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <a
-            href={`mailto:${s.email}?subject=${encodeURIComponent("Re: Your GTA Funding inquiry")}&body=${encodeURIComponent(`Hi ${s.name.split(" ")[0] || "there"},\n\n`)}`}
-            className="inline-flex items-center justify-center rounded-full bg-sky-600 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-sky-500"
-          >
-            Reply by email
-          </a>
-          {s.phone ? (
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-2">
             <a
-              href={`tel:${s.phone.replace(/\s/g, "")}`}
-              className="inline-flex items-center justify-center rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-zinc-200 transition-colors hover:border-white/25 hover:bg-white/5"
+              href={`mailto:${s.email}?subject=${encodeURIComponent("Re: Your GTA Funding inquiry")}&body=${encodeURIComponent(`Hi ${s.name.split(" ")[0] || "there"},\n\n`)}`}
+              className="inline-flex items-center justify-center rounded-full bg-sky-600 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-sky-500"
             >
-              Call
+              Reply by email
             </a>
-          ) : null}
+            {s.phone ? (
+              <a
+                href={`tel:${s.phone.replace(/\s/g, "")}`}
+                className="inline-flex items-center justify-center rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-zinc-200 transition-colors hover:border-white/25 hover:bg-white/5"
+              >
+                Call
+              </a>
+            ) : null}
+          </div>
+          <ContactInboxActions id={s.id} completed={completed} />
         </div>
       </div>
     </article>
