@@ -83,7 +83,7 @@ export function ContactForm({
       form.reset();
       setSent(true);
     } catch {
-      setError("Network error. Try again or email hello@gtafunding.ca.");
+      setError("Network error. Try again or email info@gtafunding.ca.");
     } finally {
       setSubmitting(false);
     }
@@ -183,10 +183,10 @@ export function ContactForm({
                   We received your message and will reply shortly. Questions
                   meanwhile?{" "}
                   <a
-                    href="mailto:hello@gtafunding.ca"
+                    href="mailto:info@gtafunding.ca"
                     className="font-medium text-sky-700 underline-offset-2 hover:underline"
                   >
-                    hello@gtafunding.ca
+                    info@gtafunding.ca
                   </a>
                 </motion.p>
               </motion.div>

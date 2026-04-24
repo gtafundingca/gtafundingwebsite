@@ -97,10 +97,10 @@ export default function PrivacyPolicyPage() {
               You can request access, correction, or deletion of your personal
               information by contacting{" "}
               <a
-                href="mailto:hello@gtafunding.ca"
+                href="mailto:info@gtafunding.ca"
                 className="font-medium text-sky-300 underline-offset-2 hover:underline"
               >
-                hello@gtafunding.ca
+                info@gtafunding.ca
               </a>
               .
             </p>
@@ -110,10 +110,10 @@ export default function PrivacyPolicyPage() {
             <p>
               If you have questions about this Privacy Policy, email{" "}
               <a
-                href="mailto:hello@gtafunding.ca"
+                href="mailto:info@gtafunding.ca"
                 className="font-medium text-sky-300 underline-offset-2 hover:underline"
               >
-                hello@gtafunding.ca
+                info@gtafunding.ca
               </a>
               .
             </p>

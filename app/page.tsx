@@ -8,7 +8,7 @@ import { ServiceCard } from "@/components/service-card";
 import { Marquee } from "@/components/ui/marquee";
 import { SiteHeader } from "@/components/site-header";
 import { CONTACT_CHANNELS } from "@/lib/contact-channels";
-import { Check, Mail } from "lucide-react";
+import { Check } from "lucide-react";
 const testimonialItems = [
   {
     rating: "5.0",
@@ -99,7 +99,7 @@ export default function Home() {
           <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-end px-4 pb-16 pt-8 text-center sm:px-6 sm:pb-20 sm:pt-10 md:justify-center md:pb-20 md:pt-6 lg:pt-10">
             <FadeIn className="md:flex-1 md:flex md:flex-col md:justify-center">
               <p className="mx-auto inline-flex max-w-[calc(100%-2rem)] items-center justify-center rounded-full border border-white/20 bg-black/35 px-4 py-2 text-sm font-semibold tracking-wide text-zinc-100 shadow-sm backdrop-blur-md sm:max-w-none sm:px-5 sm:py-2.5 sm:text-base">
-                🇨🇦 Canada&apos;s Fastest Business Funding
+                Canada&apos;s Fastest Business Funding
               </p>
               <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance text-white drop-shadow-md sm:text-5xl md:text-6xl md:leading-[1.05]">
                 Get Funded. No Waiting.
@@ -219,9 +219,28 @@ export default function Home() {
               className="md:col-span-2 lg:col-span-1"
               imageSrc="/Launch%20your%20vision.jpg"
               coverPositionClassName="object-[70%_center]"
+              imageAlt="Business grant advisory service"
+              badge="Grant Advisory"
+              step="03"
+              title="Government grants are free money support"
+              overviewTitle="Grant Advisory Service"
+              overviewBody="Our grant advisory service provides tailored funding strategies for businesses seeking capital through government programs. Leveraging insights from Government of Canada funding databases, we identify high-probability opportunities and assist in crafting strong, compliant applications."
+              bullets={[
+                "Targeted grant opportunity mapping",
+                "Government program eligibility review",
+                "Application strategy and compliance support",
+                "End-to-end submission guidance",
+              ]}
+              bulletsGrid
+            />
+            <ServiceCard
+              theme="light"
+              className="md:col-span-2 lg:col-span-1"
+              imageSrc="/Launch%20your%20vision.jpg"
+              coverPositionClassName="object-[70%_center]"
               imageAlt="Startup business loan"
               badge="Startup Business Loan"
-              step="03"
+              step="04"
               title="Launch your vision with flexible capital"
               overviewTitle="Startup Funding Solutions"
               overviewBody="Access capital to launch your business, even with limited operational history. We evaluate the potential of your business idea, not just your credit score."
@@ -694,17 +713,19 @@ export default function Home() {
                 </p>
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-zinc-500">
                   <a
-                    href="mailto:hello@gtafunding.ca"
+                    href="mailto:info@gtafunding.ca"
                     className="transition-colors hover:text-sky-300"
                   >
-                    hello@gtafunding.ca
+                    info@gtafunding.ca
                   </a>
                   <a
-                    href="mailto:hello@gtafunding.ca"
+                    href="https://instagram.com/gtafunding"
                     className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/[0.04] text-zinc-400 transition-colors hover:border-sky-500/40 hover:bg-sky-500/15 hover:text-sky-300"
-                    aria-label="Email GTA Funding"
+                    aria-label="Instagram GTA Funding"
                   >
-                    <Mail className="h-4 w-4" aria-hidden />
+                    <span className="text-xs font-semibold" aria-hidden>
+                      IG
+                    </span>
                   </a>
                 </div>
               </div>

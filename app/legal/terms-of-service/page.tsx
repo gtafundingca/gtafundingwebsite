@@ -110,10 +110,10 @@ export default function TermsOfServicePage() {
             <p>
               Questions about these Terms? Email{" "}
               <a
-                href="mailto:hello@gtafunding.ca"
+                href="mailto:info@gtafunding.ca"
                 className="font-medium text-sky-300 underline-offset-2 hover:underline"
               >
-                hello@gtafunding.ca
+                info@gtafunding.ca
               </a>
               .
             </p>
