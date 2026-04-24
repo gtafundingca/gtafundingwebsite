@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GTA Funding Website
 
-## Getting Started
+Marketing website and lead capture platform for GTA Funding, built with Next.js App Router.
 
-First, run the development server:
+## Tech stack
+
+- Next.js 16 (App Router, Turbopack in dev)
+- React 19 + TypeScript
+- Tailwind CSS 4
+- Supabase (optional persistent storage)
+- Resend (optional lead email notifications)
+
+## Features
+
+- Public landing page with service sections and contact channels
+- Apply form endpoint (`/api/apply`)
+- Contact form endpoint (`/api/contact`)
+- Admin login and contact inbox (`/admin`, `/admin/login`, `/admin/contacts`)
+- Storage fallback to local JSON files in `data/` when Supabase is not configured
+
+## Requirements
+
+- Node.js 20+
+- `pnpm` 10+
+
+## Local development
+
+1. Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Create a local env file:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+touch .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Start the app:
 
-## Learn More
+```bash
+pnpm dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Open [http://localhost:3000](http://localhost:3000).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Environment variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Add these in `.env.local` for local use and in your hosting provider for production.
 
-## Deploy on Vercel
+### Core
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `NEXT_PUBLIC_SITE_URL` - public site URL used in metadata (example: `https://gtafunding.ca`)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Admin auth
+
+- `ADMIN_LOGIN_ID` - admin username/login id
+- `ADMIN_PASSWORD` - admin password
+- `ADMIN_SESSION_SECRET` - secret used to sign admin session token
+
+### Supabase (optional, recommended for production)
+
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
+If both are missing, submissions are stored in local files:
+
+- `data/contact-submissions.json`
+- `data/apply-submissions.json`
+
+### Resend (optional email notifications)
+
+- `RESEND_API_KEY`
+- `CONTACT_RESEND_FROM`
+- `CONTACT_RESEND_TO`
+
+If these are not set, contact submissions are still saved, but email notifications are skipped.
+
+## Scripts
+
+- `pnpm dev` - run development server
+- `pnpm build` - build for production
+- `pnpm start` - start production server
+- `pnpm lint` - run ESLint
+
+## API routes
+
+- `POST /api/contact` - submit contact form lead
+- `POST /api/apply` - submit funding application
+- `POST /api/admin/login` - create admin session cookie
+- `POST /api/admin/logout` - clear admin session cookie
+- `PATCH /api/admin/contacts/[id]` - mark lead completed/incomplete
+- `DELETE /api/admin/contacts/[id]` - soft-delete lead
+
+## Deployment
+
+The project is ready for Vercel deployment.
+
+1. Add all required environment variables in project settings.
+2. Use `pnpm build` as the build command (default for Next.js projects).
+3. Ensure Supabase tables are created before using admin inbox in production.

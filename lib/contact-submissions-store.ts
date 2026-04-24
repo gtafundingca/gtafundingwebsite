@@ -38,6 +38,11 @@ type ContactSubmissionRow = {
 const DATA_DIR = path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIR, "contact-submissions.json");
 
+function isSupabaseTransportError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+  return /fetch failed|network|ECONN|ENOTFOUND|ETIMEDOUT/i.test(message);
+}
+
 function rowToSubmission(row: ContactSubmissionRow): ContactSubmission {
   return {
     id: row.id,
@@ -104,29 +109,38 @@ export async function addContactSubmission(
   input: Omit<ContactSubmission, "id" | "createdAt">
 ): Promise<ContactSubmission> {
   if (isSupabaseConfigured()) {
-    const supabase = getSupabaseServiceClient();
-    const { data, error } = await supabase
-      .from("contact_submissions")
-      .insert({
-        name: input.name,
-        email: input.email,
-        phone: input.phone,
-        company: input.company,
-        topic: input.topic,
-        message: input.message,
-      })
-      .select(
-        "id, created_at, completed_at, deleted_at, name, email, phone, company, topic, message"
-      )
-      .single();
+    try {
+      const supabase = getSupabaseServiceClient();
+      const { data, error } = await supabase
+        .from("contact_submissions")
+        .insert({
+          name: input.name,
+          email: input.email,
+          phone: input.phone,
+          company: input.company,
+          topic: input.topic,
+          message: input.message,
+        })
+        .select(
+          "id, created_at, completed_at, deleted_at, name, email, phone, company, topic, message"
+        )
+        .single();
 
-    if (error) {
-      throw new Error(error.message);
+      if (error) {
+        throw new Error(error.message);
+      }
+      if (!data) {
+        throw new Error("No row returned from insert");
+      }
+      return rowToSubmission(data as ContactSubmissionRow);
+    } catch (error) {
+      if (!isSupabaseTransportError(error)) {
+        throw error;
+      }
+      console.warn(
+        "[contact-submissions-store] Supabase unavailable, falling back to local file storage for insert."
+      );
     }
-    if (!data) {
-      throw new Error("No row returned from insert");
-    }
-    return rowToSubmission(data as ContactSubmissionRow);
   }
 
   return addFile(input);
@@ -134,19 +148,28 @@ export async function addContactSubmission(
 
 export async function listContactSubmissions(): Promise<ContactSubmission[]> {
   if (isSupabaseConfigured()) {
-    const supabase = getSupabaseServiceClient();
-    const { data, error } = await supabase
-      .from("contact_submissions")
-      .select(
-        "id, created_at, completed_at, deleted_at, name, email, phone, company, topic, message"
-      )
-      .is("deleted_at", null)
-      .order("created_at", { ascending: false });
+    try {
+      const supabase = getSupabaseServiceClient();
+      const { data, error } = await supabase
+        .from("contact_submissions")
+        .select(
+          "id, created_at, completed_at, deleted_at, name, email, phone, company, topic, message"
+        )
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false });
 
-    if (error) {
-      throw new Error(error.message);
+      if (error) {
+        throw new Error(error.message);
+      }
+      return (data as ContactSubmissionRow[]).map(rowToSubmission);
+    } catch (error) {
+      if (!isSupabaseTransportError(error)) {
+        throw error;
+      }
+      console.warn(
+        "[contact-submissions-store] Supabase unavailable, falling back to local file storage for list."
+      );
     }
-    return (data as ContactSubmissionRow[]).map(rowToSubmission);
   }
 
   return listFile();
@@ -159,13 +182,22 @@ export async function setContactSubmissionCompleted(
   if (!id) return;
 
   if (isSupabaseConfigured()) {
-    const supabase = getSupabaseServiceClient();
-    const { error } = await supabase
-      .from("contact_submissions")
-      .update({ completed_at: completed ? new Date().toISOString() : null })
-      .eq("id", id);
-    if (error) throw new Error(error.message);
-    return;
+    try {
+      const supabase = getSupabaseServiceClient();
+      const { error } = await supabase
+        .from("contact_submissions")
+        .update({ completed_at: completed ? new Date().toISOString() : null })
+        .eq("id", id);
+      if (error) throw new Error(error.message);
+      return;
+    } catch (error) {
+      if (!isSupabaseTransportError(error)) {
+        throw error;
+      }
+      console.warn(
+        "[contact-submissions-store] Supabase unavailable, falling back to local file storage for update."
+      );
+    }
   }
 
   const rows = await readAllFile();
@@ -182,13 +214,22 @@ export async function deleteContactSubmission(id: string): Promise<void> {
   if (!id) return;
 
   if (isSupabaseConfigured()) {
-    const supabase = getSupabaseServiceClient();
-    const { error } = await supabase
-      .from("contact_submissions")
-      .update({ deleted_at: new Date().toISOString() })
-      .eq("id", id);
-    if (error) throw new Error(error.message);
-    return;
+    try {
+      const supabase = getSupabaseServiceClient();
+      const { error } = await supabase
+        .from("contact_submissions")
+        .update({ deleted_at: new Date().toISOString() })
+        .eq("id", id);
+      if (error) throw new Error(error.message);
+      return;
+    } catch (error) {
+      if (!isSupabaseTransportError(error)) {
+        throw error;
+      }
+      console.warn(
+        "[contact-submissions-store] Supabase unavailable, falling back to local file storage for delete."
+      );
+    }
   }
 
   const rows = await readAllFile();
