@@ -631,7 +631,7 @@ export default function Home() {
                           ["Apply", "#apply"],
                           ["Testimonials", "#testimonials"],
                           ["Contact", "#contact"],
-                          ["Admin Login", "/admin/login"],
+                          ["Admin", "/admin/login"],
                         ] as const
                       ).map(([label, href]) => (
                         <li key={label}>
@@ -692,7 +692,7 @@ export default function Home() {
                           ["Terms of Service", "/legal/terms-of-service"],
                           ["Cookie Policy", "/legal/cookie-policy"],
                           ["Refund Policy", "/legal/refund-policy"],
-                          ["Admin Login", "/admin/login"],
+                          ["Admin", "/admin/login"],
                         ] as const
                       ).map(([label, href]) => (
                         <li key={label}>
