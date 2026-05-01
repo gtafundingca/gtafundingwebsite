@@ -75,9 +75,10 @@ function TestimonialBlock({
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
+      <SiteHeader variant="hero" />
       <section
         id="hero"
-        className="relative isolate min-h-[min(100dvh,56rem)] overflow-hidden border-b border-dashed border-white/10 bg-zinc-950 bg-cover bg-no-repeat [background-image:url('/herobg.jpg')] [background-position:58%_center] sm:[background-position:65%_center] md:[background-position:70%_center] lg:[background-position:72%_28%]"
+        className="relative isolate scroll-mt-24 min-h-[min(100dvh,56rem)] overflow-hidden border-b border-dashed border-white/10 bg-zinc-950 bg-cover bg-no-repeat [background-image:url('/herobg.jpg')] [background-position:58%_center] sm:[background-position:65%_center] md:[background-position:70%_center] lg:[background-position:72%_28%]"
       >
         {/* Readability overlays on top of CSS background */}
         <div
@@ -94,15 +95,13 @@ export default function Home() {
         />
 
         <div className="relative z-10 flex min-h-[min(100dvh,56rem)] w-full flex-col">
-          <SiteHeader variant="hero" />
-
           <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-end px-4 pb-16 pt-8 text-center sm:px-6 sm:pb-20 sm:pt-10 md:justify-center md:pb-20 md:pt-6 lg:pt-10">
             <FadeIn className="md:flex-1 md:flex md:flex-col md:justify-center">
               <p className="mx-auto inline-flex max-w-[calc(100%-2rem)] items-center justify-center rounded-full border border-white/20 bg-black/35 px-4 py-2 text-sm font-semibold tracking-wide text-zinc-100 shadow-sm backdrop-blur-md sm:max-w-none sm:px-5 sm:py-2.5 sm:text-base">
                 Canada&apos;s Fastest Business Funding
               </p>
               <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance text-white drop-shadow-md sm:text-5xl md:text-6xl md:leading-[1.05]">
-                Get Funded. No Waiting.
+                Get Funded No Waiting.
               </h1>
               <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-zinc-200/90 drop-shadow sm:text-lg">
                 Access flexible capital in as little as 24 hours. No red tape, no
@@ -125,7 +124,7 @@ export default function Home() {
                     <AnimatedStat
                       end={500}
                       prefix="$"
-                      suffix="M+"
+                      suffix="K"
                       className="text-white"
                     />
                   </dt>
@@ -134,7 +133,7 @@ export default function Home() {
                 <div>
                   <dt className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                     <AnimatedStat
-                      end={5000}
+                      end={1500}
                       comma
                       suffix="+"
                       className="text-white"
@@ -162,7 +161,7 @@ export default function Home() {
 
       <section
         id="service"
-        className="border-t border-dashed border-black/15 bg-white px-4 py-16 text-black sm:px-6 sm:py-20 md:py-24"
+        className="scroll-mt-24 border-t border-dashed border-black/15 bg-white px-4 py-16 text-black sm:px-6 sm:py-20 md:py-24"
       >
         <ScrollReveal className="mx-auto max-w-6xl">
           <div className="max-w-3xl text-left">
@@ -173,8 +172,8 @@ export default function Home() {
               Funding Solutions for Every Business
             </h2>
             <p className="mt-5 max-w-2xl text-zinc-600">
-              From day-one startups to scaling enterprises we have a funding
-              product that fits your journey.
+              From day-one startups to scaling enterprises, GTA Funding has a
+              funding product that fits your journey.
             </p>
           </div>
 
@@ -189,6 +188,7 @@ export default function Home() {
               title="Revenue-based funding up to $500K"
               overviewTitle="Merchant Cash Advance"
               overviewBody="Get a lump sum upfront and repay as a percentage of daily sales. No fixed payments, no collateral — just flexible funding that moves with your business."
+              applyHref="/merchant-cash-advance"
               bullets={[
                 "Funding from $5,000 – $500,000",
                 "Get funded in 24–48 hours",
@@ -258,7 +258,7 @@ export default function Home() {
 
       <section
         id="why-choose"
-        className="border-t border-dashed border-white/10 bg-black px-4 py-16 text-zinc-100 sm:px-6 sm:py-20 md:py-24"
+        className="scroll-mt-24 border-t border-dashed border-white/10 bg-black px-4 py-16 text-zinc-100 sm:px-6 sm:py-20 md:py-24"
       >
         <ScrollReveal className="mx-auto max-w-6xl">
           <div className="max-w-3xl">
@@ -340,7 +340,7 @@ export default function Home() {
 
       <section
         id="apply"
-        className="border-t border-dashed border-black/15 bg-white px-4 py-16 text-black sm:px-6 sm:py-20 md:py-24"
+        className="scroll-mt-24 border-t border-dashed border-black/15 bg-white px-4 py-16 text-black sm:px-6 sm:py-20 md:py-24"
       >
         <div className="mx-auto max-w-6xl">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-start lg:gap-12">
@@ -404,7 +404,7 @@ export default function Home() {
 
       <section
         id="testimonials"
-        className="border-t border-dashed border-white/10 bg-black px-4 py-16 text-zinc-100 sm:px-6 sm:py-20 md:py-24"
+        className="scroll-mt-24 border-t border-dashed border-white/10 bg-black px-4 py-16 text-zinc-100 sm:px-6 sm:py-20 md:py-24"
       >
         <div className="mx-auto max-w-6xl">
           <div className="grid gap-12 lg:grid-cols-[320px_1fr] lg:gap-16">
@@ -464,7 +464,7 @@ export default function Home() {
 
       <section
         id="contact"
-        className="relative border-t border-dashed border-black/10 bg-gradient-to-b from-zinc-50 via-white to-zinc-50/80 px-4 py-16 text-black sm:px-6 sm:py-20 md:py-24"
+        className="relative scroll-mt-24 border-t border-dashed border-black/10 bg-gradient-to-b from-zinc-50 via-white to-zinc-50/80 px-4 py-16 text-black sm:px-6 sm:py-20 md:py-24"
       >
         <div
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(56,189,248,0.08),transparent_60%)]"
@@ -546,7 +546,7 @@ export default function Home() {
 
       <section
         id="cta"
-        className="border-t border-dashed border-white/10 bg-black px-4 py-16 text-white sm:px-6 sm:py-20 md:py-24"
+        className="scroll-mt-24 border-t border-dashed border-white/10 bg-black px-4 py-16 text-white sm:px-6 sm:py-20 md:py-24"
       >
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-3xl text-center">
@@ -559,7 +559,7 @@ export default function Home() {
               </span>
             </h2>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-zinc-400 sm:mt-8 sm:text-lg">
-              Join 5,000+ Canadian businesses who have secured funding through GTA
+              Join 1,500+ Canadian businesses who have secured funding through GTA
               Funding. No lengthy paperwork — just a quick application and a
               dedicated advisor to guide you through.
             </p>
@@ -606,7 +606,7 @@ export default function Home() {
                       alt="GTA Funding"
                       width={320}
                       height={106}
-                      className="h-14 w-auto object-contain transition-opacity group-hover:opacity-90 sm:h-16"
+                      className="h-14 w-auto max-w-full object-contain transition-opacity group-hover:opacity-90 sm:h-16 md:h-20"
                       priority
                     />
                     <span className="sr-only">GTA Funding — home</span>
@@ -617,7 +617,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="grid min-w-0 flex-1 grid-cols-2 gap-10 sm:gap-12 md:grid-cols-3 md:gap-14">
+                <div className="grid min-w-0 flex-1 grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-12 md:grid-cols-3 md:gap-14">
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
                       Navigation
@@ -681,7 +681,7 @@ export default function Home() {
                     </ul>
                   </div>
 
-                  <div className="col-span-2 md:col-span-1">
+                  <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
                       Legal
                     </p>
@@ -692,7 +692,6 @@ export default function Home() {
                           ["Terms of Service", "/legal/terms-of-service"],
                           ["Cookie Policy", "/legal/cookie-policy"],
                           ["Refund Policy", "/legal/refund-policy"],
-                          ["Admin", "/admin/login"],
                         ] as const
                       ).map(([label, href]) => (
                         <li key={label}>
@@ -710,9 +709,19 @@ export default function Home() {
               </div>
 
               <div className="mt-12 flex flex-col gap-5 border-t border-white/[0.08] pt-8 sm:mt-14 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                <p className="text-xs text-zinc-600">
-                  © {new Date().getFullYear()} GTA Funding. All rights reserved.
-                </p>
+                <div className="flex flex-col gap-2">
+                  <p className="text-xs text-zinc-600">
+                    © {new Date().getFullYear()} GTA Funding. All rights reserved.
+                  </p>
+                  <a
+                    href="https://www.gokulakrishnan.dev"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs text-zinc-500 transition-colors hover:text-sky-300"
+                  >
+                    Developed by Gokulakrishnan
+                  </a>
+                </div>
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-zinc-500">
                   <a
                     href="mailto:info@gtafunding.ca"

@@ -33,6 +33,25 @@ type ApplySubmissionRow = {
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIR, "apply-submissions.json");
+const SUPABASE_TIMEOUT_MS = 1500;
+
+async function withTimeout<T>(promise: PromiseLike<T>, ms: number): Promise<T> {
+  return await new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(`Supabase request timeout (${ms}ms)`));
+    }, ms);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (err) => {
+        clearTimeout(timer);
+        reject(err);
+      }
+    );
+  });
+}
 
 function isSupabaseTransportError(error: unknown): boolean {
   const message = error instanceof Error ? error.message : String(error);
@@ -85,21 +104,28 @@ export async function addApplySubmission(
   if (isSupabaseConfigured()) {
     try {
       const supabase = getSupabaseServiceClient();
-      const { data, error } = await supabase
-        .from("apply_submissions")
-        .insert({
-          name: input.name,
-          email: input.email,
-          phone: input.phone,
-          company: input.company,
-          monthly_revenue: input.monthlyRevenue,
-          amount_needed: input.amountNeeded,
-          funding_use: input.fundingUse,
-        })
-        .select(
-          "id, created_at, name, email, phone, company, monthly_revenue, amount_needed, funding_use"
-        )
-        .single();
+      const result = await withTimeout(
+        supabase
+          .from("apply_submissions")
+          .insert({
+            name: input.name,
+            email: input.email,
+            phone: input.phone,
+            company: input.company,
+            monthly_revenue: input.monthlyRevenue,
+            amount_needed: input.amountNeeded,
+            funding_use: input.fundingUse,
+          })
+          .select(
+            "id, created_at, name, email, phone, company, monthly_revenue, amount_needed, funding_use"
+          )
+          .single(),
+        SUPABASE_TIMEOUT_MS
+      );
+      const { data, error } = result as {
+        data: ApplySubmissionRow | null;
+        error: { message: string } | null;
+      };
 
       if (error) throw new Error(error.message);
       if (!data) throw new Error("No row returned from insert");

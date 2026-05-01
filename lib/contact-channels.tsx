@@ -47,8 +47,8 @@ export const CONTACT_CHANNELS: ContactChannel[] = [
   {
     icon: Phone,
     label: "Advisor line",
-    value: "1 (844) 482-3863",
-    href: "tel:+18444823863",
+    value: "(888) 386-3177",
+    href: "tel:+18883863177",
     hint: "Mon–Fri · 9am–7pm ET · No menus — you reach a human.",
   },
   {

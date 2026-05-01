@@ -26,6 +26,8 @@ export type ServiceCardProps = {
   className?: string;
   /** Override title typography for longer headlines */
   titleClassName?: string;
+  /** Destination for apply actions */
+  applyHref?: string;
 };
 
 export function ServiceCard({
@@ -42,6 +44,7 @@ export function ServiceCard({
   theme = "dark",
   className,
   titleClassName,
+  applyHref = "#apply",
 }: ServiceCardProps) {
   const [overviewOpen, setOverviewOpen] = useState(false);
   const light = theme === "light";
@@ -176,7 +179,7 @@ export function ServiceCard({
               <ArrowUpRight className="h-4 w-4 opacity-90" aria-hidden />
             </button>
             <a
-              href="#apply"
+              href={applyHref}
               className={cn(
                 "text-sm font-medium underline-offset-2 transition-colors hover:underline",
                 light ? "text-sky-700 hover:text-sky-800" : "text-sky-300 hover:text-sky-200"
@@ -320,7 +323,7 @@ export function ServiceCard({
               )}
             >
               <a
-                href="#apply"
+                href={applyHref}
                 className={cn(
                   "inline-flex items-center justify-center rounded-full px-5 py-2.5 text-center text-sm font-semibold transition-colors",
                   light

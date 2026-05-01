@@ -104,7 +104,7 @@ export function SiteHeader({
   const barClass = variant === "hero" && !heroBarOpaque ? heroBarClass : solidBarClass;
 
   return (
-    <header className={`relative sticky top-0 z-50 transition-[background-color,box-shadow] duration-300 ${barClass}`}>
+    <header className={`fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow] duration-300 ${barClass}`}>
       <nav
         className="relative mx-auto flex min-h-[3.25rem] w-full max-w-6xl items-center justify-between gap-3 px-4 sm:min-h-16 sm:px-6"
         aria-label="Main"
@@ -119,7 +119,7 @@ export function SiteHeader({
             alt="GTA Funding"
             width={170}
             height={56}
-            className="h-9 w-auto object-contain transition-opacity group-hover:opacity-90 sm:h-10"
+            className="h-10 w-auto object-contain transition-opacity group-hover:opacity-90 sm:h-11"
             priority
           />
         </Link>
