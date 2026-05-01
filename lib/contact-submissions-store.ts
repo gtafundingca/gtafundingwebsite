@@ -196,16 +196,28 @@ export async function listContactSubmissions(): Promise<ContactSubmission[]> {
       }
       return (data as ContactSubmissionRow[]).map(rowToSubmission);
     } catch (error) {
-      if (!isSupabaseTransportError(error)) {
-        throw error;
+      if (isSupabaseTransportError(error)) {
+        console.warn(
+          "[contact-submissions-store] Supabase unavailable, falling back to local file storage for list."
+        );
+      } else {
+        const message = error instanceof Error ? error.message : String(error);
+        console.warn(
+          `[contact-submissions-store] Supabase list failed (${message}), trying local file storage.`
+        );
       }
-      console.warn(
-        "[contact-submissions-store] Supabase unavailable, falling back to local file storage for list."
-      );
     }
   }
 
-  return listFile();
+  try {
+    return await listFile();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(
+      `[contact-submissions-store] Local list fallback failed (${message}). Returning empty list to keep admin pages available.`
+    );
+    return [];
+  }
 }
 
 export async function setContactSubmissionCompleted(
