@@ -185,7 +185,7 @@ export default function Home() {
               imageAlt="Merchant cash advance funding"
               badge="Merchant Cash Advance"
               step="01"
-              title="Revenue-based funding up to $500K"
+              title="Revenue-based funding up to $200k"
               overviewTitle="Merchant Cash Advance"
               overviewBody="Get a lump sum upfront and repay as a percentage of daily sales. No fixed payments, no collateral — just flexible funding that moves with your business."
               applyHref="/merchant-cash-advance"
@@ -713,14 +713,6 @@ export default function Home() {
                   <p className="text-xs text-zinc-600">
                     © {new Date().getFullYear()} GTA Funding. All rights reserved.
                   </p>
-                  <a
-                    href="https://www.gokulakrishnan.dev"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs text-zinc-500 transition-colors hover:text-sky-300"
-                  >
-                    Developed by Gokulakrishnan
-                  </a>
                 </div>
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-zinc-500">
                   <a
