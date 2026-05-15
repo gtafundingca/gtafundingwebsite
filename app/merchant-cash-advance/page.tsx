@@ -115,7 +115,7 @@ export default function MerchantCashAdvancePage() {
               Merchant Cash Advance
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Crown Capital Merchant Cash Advance Application Form
+              GTA Capital Merchant Cash Advance Application Form
             </h1>
             <p className="mt-4 max-w-3xl text-sm leading-relaxed text-zinc-300 sm:text-base">
               We ask that you fill out the application below with complete and
